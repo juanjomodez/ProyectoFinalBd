@@ -6,15 +6,15 @@ import com.proyecto.backend_club_de_lectura.model.UsuarioModel;
 
 public interface IUsuarioService {
 
-    // listar todos los usuarios, muestra todos los usuarios de la bd
+    // listamos todos los usuarios, muestra todos los usuarios de la bd
     List<UsuarioModel> listarUsuarios();
 
-    // guardar un usuario, crea o actualiza un usuario
+    // con esto guardamos un usuario, crea o actualiza un usuario
     UsuarioModel guardarUsuario(UsuarioModel usuario);
 
-    // buscar un usuario por ID
+    // sirve para buscar un usuario por su id
     UsuarioModel obtenerUsuarioPorId(int id);
 
-    // borrar un usuario por ID
+    // permite borrar un usuario por id
     void eliminarUsuario(int id);
 }
