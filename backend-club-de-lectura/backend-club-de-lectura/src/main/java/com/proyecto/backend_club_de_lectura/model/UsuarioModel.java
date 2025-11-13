@@ -32,7 +32,7 @@ public class UsuarioModel {
     private int telefono;
 
     @Enumerated(EnumType.STRING) //se usa para guardar Rol como string
-    // ya que lo tenemos como un enum, para no tener problemas con posibles cambios de orden despues
+    // ya que lo tenemos como un enum, para no tener problemas con posibles cambios de orden despues/
     private Rol rol;
 
     public enum Rol {
