@@ -23,7 +23,7 @@ public class InscripcionModel {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    private String estadoInscripcion; // "activa", "finalizada", "cancelada"
+    private String estadoInscripcion; 
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
