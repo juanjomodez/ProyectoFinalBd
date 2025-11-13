@@ -29,7 +29,7 @@ public class UsuarioController {
     }
 
     // obtener un usuario por id
-    @GetMapping("/{id}") //indica get para listar un usuario, se usa id ya que ya existe en el sistema
+    @GetMapping("/obtenerUsuario/{id}") //indica get para listar un usuario, se usa id ya que ya existe en el sistema
     public UsuarioModel obtenerUsuario(@PathVariable int id) {
         return usuarioService.obtenerUsuarioPorId(id);
     }
@@ -41,14 +41,14 @@ public class UsuarioController {
     }
 
     // actualizar un usuario existente
-    @PutMapping("/{id}") //indica put para actualizar un usuario
+    @PutMapping("/actualizar/{id}") //indica put para actualizar un usuario
     public UsuarioModel actualizarUsuario(@PathVariable int id, @RequestBody UsuarioModel usuario) {
         usuario.setIdUsuario(id);
         return usuarioService.guardarUsuario(usuario);
     }
 
     // eliminar un usuario por id
-    @DeleteMapping("/{id}") // indica delete para borrar el usuario
+    @DeleteMapping("/eliminarUsuario/{id}") // indica delete para borrar el usuario
     public void eliminarUsuario(@PathVariable int id) {
         usuarioService.eliminarUsuario(id);
     }

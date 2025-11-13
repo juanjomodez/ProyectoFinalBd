@@ -7,9 +7,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
 
 @Entity //le indica a spring boot que eso representa una tabla
 @Table(name = "usuario") //le especifica al sistema el nombre de la tabla en mysql
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioModel {
 
     @Id // lo define como una pk
@@ -35,60 +43,5 @@ public class UsuarioModel {
 
     // hacemos getters y setters para poder acceder a los valores
     // get es para leer un valor privado y set es para modificar un valor pirvado
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) { // el void se usa para que no se devuelva nada
-        this.idUsuario = idUsuario;
-    }
-
-    public String getNombreCompleto() { // los get devuelven objetos
-        return nombreCompleto;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) { // los set solo guardan objetos
-        this.nombreCompleto = nombreCompleto;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
-
-    public String getOcupacion() {
-        return ocupacion;
-    }
-
-    public void setOcupacion(String ocupacion) {
-        this.ocupacion = ocupacion;
-    }
-
-    public String getCorreoElectronico() {
-        return correoElectronico;
-    }
-
-    public void setCorreoElectronico(String correoElectronico) {
-        this.correoElectronico = correoElectronico;
-    }
-
-    public int getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(int telefono) {
-        this.telefono = telefono;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
     
 }
