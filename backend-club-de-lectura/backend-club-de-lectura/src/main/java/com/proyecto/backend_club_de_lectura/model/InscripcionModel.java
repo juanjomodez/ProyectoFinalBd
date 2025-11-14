@@ -11,9 +11,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "inscripcion")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class InscripcionModel {
 
     @Id
@@ -23,53 +29,13 @@ public class InscripcionModel {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    private String estadoInscripcion; 
+    private String estadoInscripcion;
+
+    @ManyToOne // le decimos al sistema que esta relacion es de muchos a unoo
+    @JoinColumn(name = "idUsuario", nullable = false) //el join column se usa para decirle al sistema que en esta columna guarde la fk del idUsuario
+    private UsuarioModel usuario; // le decimos al sistema con que tabla es la relacion
 
     @ManyToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
-    private UsuarioModel usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "idReto", nullable = false)
-    private RetoLecturaModel reto;
-
-    public int getIdInscripcion() {
-        return idInscripcion;
-    }
-
-    public void setIdInscripcion(int idInscripcion) {
-        this.idInscripcion = idInscripcion;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getEstadoInscripcion() {
-        return estadoInscripcion;
-    }
-
-    public void setEstadoInscripcion(String estadoInscripcion) {
-        this.estadoInscripcion = estadoInscripcion;
-    }
-
-    public UsuarioModel getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(UsuarioModel usuario) {
-        this.usuario = usuario;
-    }
-
-    public RetoLecturaModel getReto() {
-        return reto;
-    }
-
-    public void setReto(RetoLecturaModel reto) {
-        this.reto = reto;
-    }
+    @JoinColumn(name = "idReto", nullable = false) //el join column se usa para decirle al sistema que en esta columna guarde la fk del idReto
+    private RetoLecturaModel reto; // le decimos al sistema con que tabla es la relacion
 }
