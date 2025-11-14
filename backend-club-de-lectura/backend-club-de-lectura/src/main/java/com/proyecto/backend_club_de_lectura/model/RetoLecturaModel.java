@@ -7,57 +7,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "retolectura")
+@Table(name = "retolectura") 
+@Data               // el data nos genera getters y setters automaticamente
+@AllArgsConstructor // es un constructor con todos los campos
+@NoArgsConstructor  // es un constructor vacío
 public class RetoLecturaModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//es para que el valor de id se 
+    // coloque automaticamente y no toque hacer id manualmente
     private int idReto;
 
     private String titulo;
     private String descripcion;
     private Date fechaInicio;
     private Date fechaFin;
-
-    public int getIdReto() {
-        return idReto;
-    }
-
-    public void setIdReto(int idReto) {
-        this.idReto = idReto;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
-    }
 }

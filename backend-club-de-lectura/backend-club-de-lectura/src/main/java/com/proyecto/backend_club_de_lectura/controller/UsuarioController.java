@@ -29,13 +29,13 @@ public class UsuarioController {
     }
 
     // obtener usuario por ID
-    @GetMapping("/obtenerUsuario/{id}")
+    @GetMapping("/obtenerUsuario/{id}") //colocamos variables de ruta, nos sirve para identificar el recurso especifico a trabajar
     public UsuarioModel obtenerUsuario(@PathVariable int id) {
         return usuarioService.obtenerUsuarioPorId(id);
     }
 
     // crear un usuario
-    @PostMapping
+    @PostMapping // no tenemos path variable ya que aca creamos una variable no existente, las variables de ruta se utilizan solo para variables existentes
     public UsuarioModel guardarUsuario(@RequestBody UsuarioModel usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
