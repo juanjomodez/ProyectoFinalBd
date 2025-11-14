@@ -15,40 +15,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto.backend_club_de_lectura.model.UsuarioModel;
 import com.proyecto.backend_club_de_lectura.service.IUsuarioService;
 
-@RestController // indica que la clase manejara peticiones de API rest
-@RequestMapping("/api/usuarios") // ruta base del endpoint
+@RestController 
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    @Autowired //conecta con la capa de service que creamos
+    @Autowired
     private IUsuarioService usuarioService;
 
     // listar todos los usuarios
-    @GetMapping // indica get para obtener datos
+    @GetMapping
     public List<UsuarioModel> listarUsuarios() {
         return usuarioService.listarUsuarios();
     }
 
-    // obtener un usuario por id
-    @GetMapping("/obtenerUsuario/{id}") //indica get para listar un usuario, se usa id ya que ya existe en el sistema
+    // obtener usuario por ID
+    @GetMapping("/obtenerUsuario/{id}")
     public UsuarioModel obtenerUsuario(@PathVariable int id) {
         return usuarioService.obtenerUsuarioPorId(id);
     }
 
-    // crear un nuevo usuario
-    @PostMapping // indica post para crear un usuario, no usamos id pq aun no existe
+    // crear un usuario
+    @PostMapping
     public UsuarioModel guardarUsuario(@RequestBody UsuarioModel usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
 
-    // actualizar un usuario existente
-    @PutMapping("/actualizar/{id}") //indica put para actualizar un usuario
+    // actualizar usuario SIN setIdUsuario
+    @PutMapping("/actualizar/{id}")
     public UsuarioModel actualizarUsuario(@PathVariable int id, @RequestBody UsuarioModel usuario) {
-        usuario.setIdUsuario(id);
         return usuarioService.guardarUsuario(usuario);
     }
 
-    // eliminar un usuario por id
-    @DeleteMapping("/eliminarUsuario/{id}") // indica delete para borrar el usuario
+    // eliminar usuario por ID
+    @DeleteMapping("/eliminarUsuario/{id}")
     public void eliminarUsuario(@PathVariable int id) {
         usuarioService.eliminarUsuario(id);
     }
