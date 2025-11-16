@@ -14,7 +14,7 @@ import com.proyecto.backend_club_de_lectura.repository.IRetoLecturaRepository;
 import com.proyecto.backend_club_de_lectura.repository.IUsuarioRepository;
 
 @Service
-public class IncripcionServiceImp implements IInscripcionService {
+public class InscripcionServiceImp implements IInscripcionService {
 
     @Autowired
     private IInscripcionRepository inscripcionRepository;
@@ -47,7 +47,7 @@ public class IncripcionServiceImp implements IInscripcionService {
         RetoLecturaModel reto = retoLecturaRepository.findById(idReto)
                 .orElseThrow(() -> new RuntimeException("Reto no encontrado"));
 
-        // crear inscripción
+        // crear inscripcion
         InscripcionModel nueva = new InscripcionModel();
         nueva.setUsuario(usuario);
         nueva.setReto(reto);
