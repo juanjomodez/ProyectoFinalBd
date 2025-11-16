@@ -1,5 +1,6 @@
 package com.proyecto.backend_club_de_lectura.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,19 +21,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsuarioModel {
 
-    @Id // lo define como una pk
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //es para que el valor de id se 
-    // coloque automaticamente
+    @Id // lo define como una primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //es para que el valor de id se coloque automaticamente
+    @Column(name = "idUsuario")
     private int idUsuario;
 
+    @Column(name = "nombreCompleto")
     private String nombreCompleto;
+
+    @Column(name = "edad")
     private int edad;
+
+    @Column(name = "ocupacion")
     private String ocupacion;
+
+    @Column(name = "correoElectronico")
     private String correoElectronico;
+
+    @Column(name = "telefono")
     private int telefono;
 
-    @Enumerated(EnumType.STRING) //se usa para guardar Rol como string
-    // ya que lo tenemos como un enum, para no tener problemas con posibles cambios de orden despues/
+    @Enumerated(EnumType.STRING) //se usa para guardar Rol como string ya que lo tenemos como un enum, para no tener problemas con posibles cambios de orden despues/
+    @Column(name = "rol")
     private Rol rol;
 
     public enum Rol {
@@ -40,8 +50,5 @@ public class UsuarioModel {
         moderador,
         administrador
     }
-
-    // hacemos getters y setters para poder acceder a los valores
-    // get es para leer un valor privado y set es para modificar un valor pirvado
     
 }

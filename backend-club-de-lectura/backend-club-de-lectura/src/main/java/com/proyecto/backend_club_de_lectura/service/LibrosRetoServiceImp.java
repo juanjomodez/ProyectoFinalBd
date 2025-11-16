@@ -1,3 +1,5 @@
+package com.proyecto.backend_club_de_lectura.service;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import com.proyecto.backend_club_de_lectura.model.RetoLecturaModel;
 import com.proyecto.backend_club_de_lectura.repository.ILibroRepository;
 import com.proyecto.backend_club_de_lectura.repository.ILibrosRetoRepository;
 import com.proyecto.backend_club_de_lectura.repository.IRetoLecturaRepository;
-import com.proyecto.backend_club_de_lectura.service.ILibrosRetoService;
 
 @Service
 public class LibrosRetoServiceImp implements ILibrosRetoService {

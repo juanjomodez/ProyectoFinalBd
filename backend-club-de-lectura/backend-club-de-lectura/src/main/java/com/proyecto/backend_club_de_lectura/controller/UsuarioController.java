@@ -35,7 +35,7 @@ public class UsuarioController {
     }
 
     // crear un usuario
-    @PostMapping // no tenemos path variable ya que aca creamos una variable no existente, las variables de ruta se utilizan solo para variables existentes
+    @PostMapping("/insertar") // no tenemos path variable ya que aca creamos una variable no existente, las variables de ruta se utilizan solo para variables existentes
     public UsuarioModel guardarUsuario(@RequestBody UsuarioModel usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
