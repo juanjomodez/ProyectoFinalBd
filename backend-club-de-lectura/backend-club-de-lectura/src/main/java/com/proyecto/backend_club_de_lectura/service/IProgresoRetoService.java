@@ -5,15 +5,15 @@ import java.util.List;
 import com.proyecto.backend_club_de_lectura.model.ProgresoRetoModel;
 
 public interface IProgresoRetoService {
-// Registrar el primer progreso (si no existe aún)
+// registra el primer progreso (si no existe aun)
     ProgresoRetoModel registrarProgreso(Integer idInscripcion, Integer idLibro, Double porcentaje);
 
-    // Actualizar el progreso existente
+    // actualiza el progreso existente
     ProgresoRetoModel actualizarProgreso(Integer idProgreso, Double nuevoPorcentaje);
 
-    // Obtener progreso por inscripción (un usuario dentro de un reto)
+    // obtiene progreso por inscripción (un usuario dentro de un reto)
     List<ProgresoRetoModel> obtenerProgresoDeInscripcion(Integer idInscripcion);
 
-    // Obtener progreso específico
+    // obttiene progreso específico
     ProgresoRetoModel obtenerProgresoPorId(Integer idProgreso);
 }

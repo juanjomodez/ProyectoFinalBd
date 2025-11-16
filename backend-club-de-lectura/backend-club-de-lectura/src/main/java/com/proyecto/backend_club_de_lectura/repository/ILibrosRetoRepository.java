@@ -7,6 +7,6 @@ import com.proyecto.backend_club_de_lectura.model.LibrosRetoModel;
 
 @Repository
 public interface ILibrosRetoRepository extends JpaRepository<LibrosRetoModel, Integer> {
-    // Verifica si un libro pertenece a un reto
+    // se encarga de verificar si un libro pertenece a un reto
     boolean existsByLibro_IdLibroAndReto_IdReto(Integer idLibro, Integer idReto);
 }

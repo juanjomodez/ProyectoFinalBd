@@ -11,9 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity // Indica que esta clase es una entidad JPA
-@Table(name = "libros_reto") // Mapea la entidad a la tabla "libros_reto" en la base de datos
-@Data // Genera getters, setters y otros métodos útiles automáticamente
+@Entity // indica que esta clase es una entidad jpa
+@Table(name = "libros_reto") // 
+@Data // genera getters y setters
 @AllArgsConstructor // Genera un constructor con todos los atributos
 @NoArgsConstructor // Genera un constructor sin atributos
 
@@ -22,16 +22,12 @@ public class LibrosRetoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Integer idLibrosReto;
 
-    // ---------------------------
-    // FK hacia Libro
-    // ---------------------------
+    
     @ManyToOne
     @JoinColumn(name = "idLibro", nullable = false)
     private LibroModel libro;
 
-    // ---------------------------
-    // FK hacia RetoLectura
-    // ---------------------------
+   
     @ManyToOne
     @JoinColumn(name = "idReto", nullable = false)
     private RetoLecturaModel reto;
