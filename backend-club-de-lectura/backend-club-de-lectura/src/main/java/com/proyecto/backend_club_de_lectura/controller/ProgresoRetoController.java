@@ -53,10 +53,10 @@ public class ProgresoRetoController {
 
     
     // actualizar porcentaje de progreso
-    @PutMapping("/actualizar/{idProgreso}")
-    public ResponseEntity<ProgresoRetoModel> actualizar(
-            @PathVariable Integer idProgreso,
-            @RequestBody ActualizarProgresoRequest request) {
+    @PutMapping("/actualizar/{idProgreso}") //put sirve para actualizar
+    public ResponseEntity<ProgresoRetoModel> actualizar( 
+            @PathVariable Integer idProgreso, // @PathVariable se usa para identificar que progreso actualizar por que el id ya existe
+            @RequestBody ActualizarProgresoRequest request) { /// @RequestBody se usa porque necesitamos que el usuario envíe el nuevo porcentaje en formato json
 
         ProgresoRetoModel actualizado = progresoRetoService.actualizarProgreso(
             idProgreso,
@@ -68,7 +68,7 @@ public class ProgresoRetoController {
 
     // obtener progreso de una inscripción específica
     @GetMapping("/inscripcion/{idInscripcion}")
-    public ResponseEntity<List<ProgresoRetoModel>> obtenerPorInscripcion(
+    public ResponseEntity<List<ProgresoRetoModel>> obtenerPorInscripcion( // no usamos @RequestBody ya que solo se pide informacion, no se envian datos
             @PathVariable Integer idInscripcion) {
 
         List<ProgresoRetoModel> progreso = progresoRetoService.obtenerProgresoDeInscripcion(idInscripcion);
