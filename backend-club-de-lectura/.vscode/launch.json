@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BackendClubDeLecturaApplication<backend-club-de-lectura>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.proyecto.backend_club_de_lectura.BackendClubDeLecturaApplication",
+            "projectName": "backend-club-de-lectura",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
