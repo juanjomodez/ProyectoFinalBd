@@ -42,9 +42,19 @@ public class UsuarioController {
 
     // actualizar usuario SIN setIdUsuario
     @PutMapping("/actualizar/{id}")
-    public UsuarioModel actualizarUsuario(@PathVariable int id, @RequestBody UsuarioModel usuario) {
-        return usuarioService.guardarUsuario(usuario);
-    }
+public UsuarioModel actualizarUsuario(@PathVariable int id, @RequestBody UsuarioModel usuarioActualizado) {
+    UsuarioModel usuarioExistente = usuarioService.obtenerUsuarioPorId(id);
+
+    usuarioExistente.setNombreCompleto(usuarioActualizado.getNombreCompleto());
+    usuarioExistente.setEdad(usuarioActualizado.getEdad());
+    usuarioExistente.setOcupacion(usuarioActualizado.getOcupacion());
+    usuarioExistente.setCorreoElectronico(usuarioActualizado.getCorreoElectronico());
+    usuarioExistente.setTelefono(usuarioActualizado.getTelefono());
+    usuarioExistente.setRol(usuarioActualizado.getRol());
+
+    return usuarioService.guardarUsuario(usuarioExistente);
+}
+
 
     // eliminar usuario por ID
     @DeleteMapping("/eliminarUsuario/{id}")
