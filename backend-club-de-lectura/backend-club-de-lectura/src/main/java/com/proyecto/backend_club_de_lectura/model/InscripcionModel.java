@@ -3,6 +3,8 @@ package com.proyecto.backend_club_de_lectura.model;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,12 +13,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "inscripcion")
+@Table(
+    name = "inscripcion",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"idUsuario", "idReto"}) // se usa para que un usuario no pueda inscribirse dos veces en el mismo reto
+    }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +37,14 @@ public class InscripcionModel {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    private String estadoInscripcion;
+    @Enumerated(EnumType.STRING) //se coloco para guardar EstadoInscripcion como string ya que lo tenemos como un enum, para no tener problemas con posibles cambios de orden
+
+    private EstadoInscripcion estadoInscripcion;
+    public enum EstadoInscripcion {
+        activa,
+        finalizada,
+        cancelada
+    }
 
     @ManyToOne // le decimos al sistema que esta relacion es de muchos a unoo
     @JoinColumn(name = "idUsuario", nullable = false) //el join column se usa para decirle al sistema que en esta columna guarde la fk del idUsuario
