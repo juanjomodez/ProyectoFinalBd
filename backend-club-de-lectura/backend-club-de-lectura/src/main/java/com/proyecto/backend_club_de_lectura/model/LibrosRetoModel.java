@@ -7,12 +7,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity // indica que esta clase es una entidad jpa
-@Table(name = "libros_reto") // 
+@Table(
+    name = "libros_reto",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"idLibro", "idReto"})
+)
 @Data // genera getters y setters
 @AllArgsConstructor // Genera un constructor con todos los atributos
 @NoArgsConstructor // Genera un constructor sin atributos
