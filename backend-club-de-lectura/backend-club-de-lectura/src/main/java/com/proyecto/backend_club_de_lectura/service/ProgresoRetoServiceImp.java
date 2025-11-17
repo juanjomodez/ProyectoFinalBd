@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.proyecto.backend_club_de_lectura.exception.ErrorLogicoException;
+import com.proyecto.backend_club_de_lectura.exception.RecursoNoEncontradoException;
 import com.proyecto.backend_club_de_lectura.model.ProgresoRetoModel;
 import com.proyecto.backend_club_de_lectura.repository.IInscripcionRepository;
 import com.proyecto.backend_club_de_lectura.repository.ILibroRepository;
@@ -31,64 +33,64 @@ public class ProgresoRetoServiceImp implements IProgresoRetoService {
     public ProgresoRetoModel registrarProgreso(Integer idInscripcion, Integer idLibro, Double porcentaje) {
         
         var inscripcion = inscripcionRepo.findById(idInscripcion)
-            .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+            .orElseThrow(() -> new RecursoNoEncontradoException("Inscripción no encontrada"));
 
-    var libro = libroRepo.findById(idLibro)
-            .orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+        var libro = libroRepo.findById(idLibro)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Libro no encontrado"));
 
-    // Verificar que el libro pertenezca al reto
-    boolean pertenece = librosRetoRepo.existsByLibro_IdLibroAndReto_IdReto(
-            idLibro, 
-            inscripcion.getReto().getIdReto()
-    );
+        boolean pertenece = librosRetoRepo.existsByLibro_IdLibroAndReto_IdReto(
+                idLibro, 
+                inscripcion.getReto().getIdReto()
+        );
 
-    if (!pertenece) {
-        throw new RuntimeException("El libro no está asociado a este reto");
-    }
+        if (!pertenece) {
+            throw new ErrorLogicoException("El libro no pertenece a este reto");
+        }
 
-    // Validar que no exista progreso previo
-    if (progresoRepo.existsByInscripcion_IdInscripcionAndLibro_IdLibro(idInscripcion, idLibro)) {
-        throw new RuntimeException("El progreso de este libro ya está registrado");
-    }
+        if (progresoRepo.existsByInscripcion_IdInscripcionAndLibro_IdLibro(idInscripcion, idLibro)) {
+            throw new ErrorLogicoException("Ya existe un progreso registrado para este libro");
+        }
 
-    // Crear progreso nuevo
-    ProgresoRetoModel pr = new ProgresoRetoModel();
-    pr.setInscripcion(inscripcion);
-    pr.setLibro(libro);
-    pr.setPorcentajeAvance(porcentaje);
-    pr.setFechaActualizacion(new Date());
-    pr.setEstado(ProgresoRetoModel.Estado.en_progreso);
+        ProgresoRetoModel pr = new ProgresoRetoModel();
+        pr.setInscripcion(inscripcion);
+        pr.setLibro(libro);
+        pr.setPorcentajeAvance(porcentaje);
+        pr.setFechaActualizacion(new Date());
+        pr.setEstado(ProgresoRetoModel.Estado.en_progreso);
 
-    return progresoRepo.save(pr);
+        return progresoRepo.save(pr);
     }
 
     @Override
     public ProgresoRetoModel actualizarProgreso(Integer idProgreso, Double nuevoPorcentaje) {
         
         var progreso = progresoRepo.findById(idProgreso)
-            .orElseThrow(() -> new RuntimeException("Progreso no encontrado"));
+            .orElseThrow(() -> new RecursoNoEncontradoException("Progreso no encontrado"));
 
-    progreso.setPorcentajeAvance(nuevoPorcentaje);
-    progreso.setFechaActualizacion(new Date());
+        if (nuevoPorcentaje < 0 || nuevoPorcentaje > 100) {
+            throw new ErrorLogicoException("El porcentaje debe estar entre 0 y 100");
+        }
 
-    if (nuevoPorcentaje >= 100) {
-        progreso.setEstado(ProgresoRetoModel.Estado.completado);
-    } else {
-        progreso.setEstado(ProgresoRetoModel.Estado.en_progreso);
-    }
+        progreso.setPorcentajeAvance(nuevoPorcentaje);
+        progreso.setFechaActualizacion(new Date());
 
-    return progresoRepo.save(progreso);
+        if (nuevoPorcentaje >= 100) {
+            progreso.setEstado(ProgresoRetoModel.Estado.completado);
+        } else {
+            progreso.setEstado(ProgresoRetoModel.Estado.en_progreso);
+        }
+
+        return progresoRepo.save(progreso);
     }
 
     @Override
     public List<ProgresoRetoModel> obtenerProgresoDeInscripcion(Integer idInscripcion) {
-       return progresoRepo.findByInscripcion_IdInscripcion(idInscripcion);
+        return progresoRepo.findByInscripcion_IdInscripcion(idInscripcion);
     }
 
     @Override
     public ProgresoRetoModel obtenerProgresoPorId(Integer idProgreso) {
         return progresoRepo.findById(idProgreso)
-            .orElseThrow(() -> new RuntimeException("Progreso no encontrado"));
+            .orElseThrow(() -> new RecursoNoEncontradoException("Progreso no encontrado"));
     }
-    
 }

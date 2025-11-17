@@ -11,5 +11,7 @@ public interface IRetoLecturaService {
 
     RetoLecturaModel obtenerRetoPorId(int id);
 
-    void eliminarReto(int id);
+    RetoLecturaModel actualizarReto(int id, RetoLecturaModel datos);
+
+    void eliminarReto(int id) throws Exception;
 }

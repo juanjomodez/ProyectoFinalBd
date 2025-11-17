@@ -5,56 +5,66 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.proyecto.backend_club_de_lectura.exception.RecursoNoEncontradoException;
+import com.proyecto.backend_club_de_lectura.exception.RetoConInscritosException;
 import com.proyecto.backend_club_de_lectura.model.RetoLecturaModel;
 import com.proyecto.backend_club_de_lectura.repository.IInscripcionRepository;
 import com.proyecto.backend_club_de_lectura.repository.IRetoLecturaRepository;
 
-@Service 
+@Service
 public class RetoLecturaServiceImp implements IRetoLecturaService {
 
     @Autowired
-    private IRetoLecturaRepository retoRepository; 
-    // implementamos la interfaz para acceder a los métodos CRUD de la tabla reto
+    private IRetoLecturaRepository retoRepository;
 
-    @Autowired 
+    @Autowired
     private IInscripcionRepository inscripcionRepository;
-    // conectamos con inscripción para validar que un reto no tenga inscritos
 
-    // permite listar los retos existentes
     @Override
     public List<RetoLecturaModel> listarRetos() {
         return retoRepository.findAll();
     }
 
-    // guardar el reto
     @Override
     public RetoLecturaModel guardarReto(RetoLecturaModel reto) {
         return retoRepository.save(reto);
     }
 
-    // obtener el reto por el id especifico SIN OPTIONAL
     @Override
     public RetoLecturaModel obtenerRetoPorId(int id) {
-        // lo que hace es buscar en la bd si el id existe
-        // si no existe nos da null
-        // usamos el orElse(null) para decir "en otro caso devuelva null"
-        return retoRepository.findById(id).orElse(null);
+        return retoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("El reto con ID " + id + " no existe"));
     }
 
-    // permite eliminar retos solo si no tienen inscritos
+    @Override
+    public RetoLecturaModel actualizarReto(int id, RetoLecturaModel datos) {
+        RetoLecturaModel existente = retoRepository.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No se puede actualizar. El reto con ID " + id + " no existe"));
+
+        existente.setTitulo(datos.getTitulo());
+        existente.setDescripcion(datos.getDescripcion());
+        existente.setFechaInicio(datos.getFechaInicio());
+        existente.setFechaFin(datos.getFechaFin());
+
+        return retoRepository.save(existente);
+    }
+
     @Override
     public void eliminarReto(int id) {
 
-        // contamos cuántas inscripciones tiene ese reto
-        int count = inscripcionRepository.countByReto_IdReto(id);
+        // Validamos que exista
+        RetoLecturaModel reto = retoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "No se puede eliminar. El reto con ID " + id + " no existe"));
 
-        // si tiene el reto tiene inscritos no se elimina
-        if (count > 0) {
-            System.out.println("No se puede eliminar el reto porque tiene inscritos.");
-            return; 
+        // Verificamos si tiene inscripciones
+        int inscritos = inscripcionRepository.countByReto_IdReto(id);
+
+        if (inscritos > 0) {
+            throw new RetoConInscritosException(
+                    "No se puede eliminar el reto: tiene " + inscritos + " usuarios inscritos");
         }
 
-        // en cambio si no tiene inscritos si se eliminara
+        // Si pasa todas las validaciones
         retoRepository.deleteById(id);
     }
 }

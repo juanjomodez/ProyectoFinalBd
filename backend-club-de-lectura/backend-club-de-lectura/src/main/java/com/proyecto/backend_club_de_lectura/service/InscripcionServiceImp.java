@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.proyecto.backend_club_de_lectura.exception.RecursoNoEncontradoException;
+import com.proyecto.backend_club_de_lectura.exception.ErrorLogicoException;
 import com.proyecto.backend_club_de_lectura.model.InscripcionModel;
 import com.proyecto.backend_club_de_lectura.model.RetoLecturaModel;
 import com.proyecto.backend_club_de_lectura.model.UsuarioModel;
@@ -29,25 +31,27 @@ public class InscripcionServiceImp implements IInscripcionService {
     @Override
     public InscripcionModel inscribirUsuarioEnReto(int idUsuario, int idReto) {
 
-        // validar si ya existe
+        // Validar si ya existe inscripción
         if (inscripcionRepository.findByUsuarioIdUsuarioAndRetoIdReto(idUsuario, idReto).isPresent()) {
-            throw new RuntimeException("El usuario ya está inscrito en este reto.");
+            throw new ErrorLogicoException("El usuario ya está inscrito en este reto.");
         }
 
-        // obtener usuario
+        // Buscar usuario
         UsuarioModel usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() ->
+                    new RecursoNoEncontradoException("Usuario con ID " + idUsuario + " no encontrado"));
 
-        // validar rol
+        // Validar rol
         if (usuario.getRol() != UsuarioModel.Rol.lector) {
-            throw new RuntimeException("Solo los usuarios con rol 'lector' pueden inscribirse.");
+            throw new ErrorLogicoException("Solo los usuarios con rol 'lector' pueden inscribirse.");
         }
 
-        // obtener reto
+        // Buscar reto
         RetoLecturaModel reto = retoLecturaRepository.findById(idReto)
-                .orElseThrow(() -> new RuntimeException("Reto no encontrado"));
+                .orElseThrow(() ->
+                    new RecursoNoEncontradoException("Reto con ID " + idReto + " no encontrado"));
 
-        // crear inscripcion
+        // Crear inscripción
         InscripcionModel nueva = new InscripcionModel();
         nueva.setUsuario(usuario);
         nueva.setReto(reto);
@@ -57,11 +61,13 @@ public class InscripcionServiceImp implements IInscripcionService {
         return inscripcionRepository.save(nueva);
     }
 
-    
+
     @Override
     public InscripcionModel cancelarInscripcion(int idInscripcion) {
+
         InscripcionModel inscripcion = inscripcionRepository.findById(idInscripcion)
-                .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+                .orElseThrow(() ->
+                    new RecursoNoEncontradoException("Inscripción con ID " + idInscripcion + " no encontrada"));
 
         inscripcion.setEstadoInscripcion(InscripcionModel.EstadoInscripcion.cancelada);
 
@@ -78,7 +84,7 @@ public class InscripcionServiceImp implements IInscripcionService {
     @Override
     public InscripcionModel buscarPorId(int idInscripcion) {
         return inscripcionRepository.findById(idInscripcion)
-                .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+                .orElseThrow(() ->
+                    new RecursoNoEncontradoException("Inscripción con ID " + idInscripcion + " no encontrada"));
     }
 }
-

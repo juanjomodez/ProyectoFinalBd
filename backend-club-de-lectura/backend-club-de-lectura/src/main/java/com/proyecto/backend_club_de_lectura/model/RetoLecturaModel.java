@@ -2,6 +2,7 @@ package com.proyecto.backend_club_de_lectura.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,19 +13,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "retolectura") 
-@Data               // el data nos genera getters y setters automaticamente
-@AllArgsConstructor // es un constructor con todos los campos
-@NoArgsConstructor  // es un constructor vacío
+@Table(name = "retolectura")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RetoLecturaModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)//es para que el valor de id se 
-    // coloque automaticamente y no toque hacer id manualmente
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idReto")
     private int idReto;
 
+    @Column(name = "titulo")
     private String titulo;
+
+    @Column(name = "descripcion")
     private String descripcion;
+
+    @Column(name = "fechaInicio")
     private Date fechaInicio;
+
+    @Column(name = "fechaFin")
     private Date fechaFin;
 }

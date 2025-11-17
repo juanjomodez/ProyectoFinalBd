@@ -18,7 +18,7 @@ import com.proyecto.backend_club_de_lectura.service.IInscripcionService;
 @RestController
 @RequestMapping("/api/inscripciones")
 public class InscripcionController {
-        @Autowired
+    @Autowired
     private IInscripcionService inscripcionService;
 
     // DTO interno para recibir JSON { "idUsuario": 1, "idReto": 5 }
@@ -53,7 +53,7 @@ public class InscripcionController {
     }
 
     
-    @GetMapping("/{idInscripcion}")
+    @GetMapping("obtener/{idInscripcion}")
     public ResponseEntity<?> buscarPorId(@PathVariable int idInscripcion) {
         return ResponseEntity.ok(inscripcionService.buscarPorId(idInscripcion));
     }

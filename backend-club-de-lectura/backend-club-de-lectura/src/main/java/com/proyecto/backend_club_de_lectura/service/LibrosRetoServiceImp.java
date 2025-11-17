@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.proyecto.backend_club_de_lectura.exception.ErrorLogicoException;
+import com.proyecto.backend_club_de_lectura.exception.RecursoNoEncontradoException;
 import com.proyecto.backend_club_de_lectura.model.LibroModel;
 import com.proyecto.backend_club_de_lectura.model.LibrosRetoModel;
 import com.proyecto.backend_club_de_lectura.model.RetoLecturaModel;
@@ -27,24 +29,20 @@ public class LibrosRetoServiceImp implements ILibrosRetoService {
     @Override
     public LibrosRetoModel agregarLibroAReto(Integer idLibro, Integer idReto) {
 
-        // Validar duplicado
+        // ❌ Regla de negocio → ya existe la relación
         if (librosRetoRepository.existsByLibro_IdLibroAndReto_IdReto(idLibro, idReto)) {
-            throw new RuntimeException("El libro ya está asociado a este reto.");
+            throw new ErrorLogicoException("El libro ya está asociado a este reto.");
         }
 
-        // Buscar libro
-        LibroModel libro = libroRepository.findById(idLibro).orElse(null);
-        if (libro == null) {
-            throw new RuntimeException("Libro no encontrado.");
-        }
+        // ✔ Libro existente
+        LibroModel libro = libroRepository.findById(idLibro)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Libro con ID " + idLibro + " no encontrado."));
 
-        // Buscar reto
-        RetoLecturaModel reto = retoRepository.findById(idReto).orElse(null);
-        if (reto == null) {
-            throw new RuntimeException("Reto no encontrado.");
-        }
+        // ✔ Reto existente
+        RetoLecturaModel reto = retoRepository.findById(idReto)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Reto con ID " + idReto + " no encontrado."));
 
-        // Crear relación (forma básica)
+        // ✔ Crear relación
         LibrosRetoModel relacion = new LibrosRetoModel();
         relacion.setLibro(libro);
         relacion.setReto(reto);
@@ -54,9 +52,14 @@ public class LibrosRetoServiceImp implements ILibrosRetoService {
 
     @Override
     public List<LibrosRetoModel> obtenerLibrosPorReto(Integer idReto) {
+
+        // ⚠ Si deseas, puedes validar que el reto exista:
+        retoRepository.findById(idReto)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Reto con ID " + idReto + " no encontrado."));
+
         List<LibrosRetoModel> lista = librosRetoRepository.findAll();
 
-        // FILTRADO BÁSICO, como lo vieron en clase
+        // FILTRADO BÁSICO
         List<LibrosRetoModel> resultado = new java.util.ArrayList<>();
 
         for (LibrosRetoModel lr : lista) {
@@ -70,6 +73,13 @@ public class LibrosRetoServiceImp implements ILibrosRetoService {
 
     @Override
     public void eliminarLibroDeReto(Integer idLibrosReto) {
+
+        // ✔ Validar existencia antes de eliminar
+        librosRetoRepository.findById(idLibrosReto)
+            .orElseThrow(() -> new RecursoNoEncontradoException(
+                "La relación libro-reto con ID " + idLibrosReto + " no existe."
+            ));
+
         librosRetoRepository.deleteById(idLibrosReto);
     }
 }

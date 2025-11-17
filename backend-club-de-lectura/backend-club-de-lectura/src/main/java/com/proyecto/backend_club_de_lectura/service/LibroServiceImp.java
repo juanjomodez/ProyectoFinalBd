@@ -5,14 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.proyecto.backend_club_de_lectura.exception.RecursoNoEncontradoException;
 import com.proyecto.backend_club_de_lectura.model.LibroModel;
 import com.proyecto.backend_club_de_lectura.repository.ILibroRepository;
 
-@Service  // indica que es un servicio
+@Service
 public class LibroServiceImp implements ILibroService {
 
     @Autowired
-    private ILibroRepository libroRepository; // conecta con BD
+    private ILibroRepository libroRepository;
 
     @Override
     public List<LibroModel> listarLibros() {
@@ -26,11 +27,20 @@ public class LibroServiceImp implements ILibroService {
 
     @Override
     public LibroModel obtenerLibroPorId(int id) {
-        return libroRepository.findById(id).orElse(null);
+        return libroRepository.findById(id)
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException("Libro con ID " + id + " no existe"));
     }
 
     @Override
     public void eliminarLibro(int id) {
+
+        // Primero se valida que el libro exista
+        libroRepository.findById(id)
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException("Libro con ID " + id + " no existe"));
+
+        // Luego se elimina
         libroRepository.deleteById(id);
     }
 }

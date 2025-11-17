@@ -3,6 +3,7 @@ package com.proyecto.backend_club_de_lectura.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,15 +44,18 @@ public class RetoLecturaController {
     // actualizar un reto existente
     @PutMapping("/actualizar/{id}") //put sirve para actualizar informacion ya existente
     public RetoLecturaModel actualizarReto(@PathVariable int id, @RequestBody RetoLecturaModel reto) {
-        reto.setIdReto(id);
-        return retoService.guardarReto(reto);
+        return retoService.actualizarReto(id, reto);
     }
+
 
     // eliminar un reto (solo si no tiene inscritos)
     @DeleteMapping("/eliminar/{id}") //delete sirve para eliminar informacion existente
-    public void eliminarReto(@PathVariable int id) {
+    public ResponseEntity<String> eliminarReto(@PathVariable int id) {
+    try {
         retoService.eliminarReto(id);
+        return ResponseEntity.ok("Reto eliminado correctamente");
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
-    //probando subir este comentario 
-    //otro comentario para probar
+}
 }
