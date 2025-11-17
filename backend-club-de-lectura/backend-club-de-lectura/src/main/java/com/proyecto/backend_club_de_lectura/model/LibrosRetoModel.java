@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity // indica que esta clase es una entidad jpa
-@Table(name = "libros_reto") // 
+@Table(name = "librosreto") // 
 @Data // genera getters y setters
 @AllArgsConstructor // Genera un constructor con todos los atributos
 @NoArgsConstructor // Genera un constructor sin atributos
