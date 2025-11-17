@@ -3,15 +3,9 @@ package com.proyecto.backend_club_de_lectura.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.proyecto.backend_club_de_lectura.exception.RecursoNoEncontradoException;
 import com.proyecto.backend_club_de_lectura.model.LibroModel;
 import com.proyecto.backend_club_de_lectura.service.ILibroService;
 
@@ -22,29 +16,55 @@ public class LibroController {
     @Autowired
     private ILibroService libroService;
 
+    // Obtener todos los libros
     @GetMapping
     public List<LibroModel> listarLibros() {
         return libroService.listarLibros();
     }
 
-    @GetMapping("/{id}")
+    // Obtener libro por ID
+    @GetMapping("/obtener/{id}")
     public LibroModel obtenerLibro(@PathVariable int id) {
-        return libroService.obtenerLibroPorId(id);
+        LibroModel libro = libroService.obtenerLibroPorId(id);
+
+        if (libro == null) {
+            throw new RecursoNoEncontradoException("Libro con id " + id + " no existe.");
+        }
+
+        return libro;
     }
 
-    @PostMapping
+    // Crear libro
+    @PostMapping("/guardar")
     public LibroModel guardarLibro(@RequestBody LibroModel libro) {
         return libroService.guardarLibro(libro);
     }
 
-    @PutMapping("/{id}")
+    // Actualizar libro
+    @PutMapping("actualizar/{id}")
     public LibroModel actualizarLibro(@PathVariable int id, @RequestBody LibroModel libro) {
-        libro.setIdLibro(id); 
+
+        LibroModel existente = libroService.obtenerLibroPorId(id);
+
+        if (existente == null) {
+            throw new RecursoNoEncontradoException("No se puede actualizar. El libro con id " + id + " no existe.");
+        }
+
+        libro.setIdLibro(id);
         return libroService.guardarLibro(libro);
     }
 
-    @DeleteMapping("/{id}")
-    public void eliminarLibro(@PathVariable int id) {
+    // Eliminar
+    @DeleteMapping("eliminar/{id}")
+    public String eliminarLibro(@PathVariable int id) {
+
+        LibroModel existente = libroService.obtenerLibroPorId(id);
+
+        if (existente == null) {
+            throw new RecursoNoEncontradoException("No se puede eliminar. El libro con id " + id + " no existe.");
+        }
+
         libroService.eliminarLibro(id);
+        return "Libro eliminado correctamente.";
     }
 }

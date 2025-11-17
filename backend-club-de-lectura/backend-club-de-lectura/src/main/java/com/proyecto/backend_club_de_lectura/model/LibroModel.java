@@ -2,6 +2,9 @@ package com.proyecto.backend_club_de_lectura.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,31 +18,44 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity //le indica a spring boot que eso representa una tabla
-@Table(name = "libro") //le especifica al sistema el nombre de la tabla en mysql
-@Data //genera getters y setters automaticamente
-@AllArgsConstructor //genera constructor con todos los atributos
-@NoArgsConstructor //genera constructor sin atributos
-
+@Entity
+@Table(name = "libro")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LibroModel {
-    @Id // lo define como una pk
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //es para que el valor de id se 
-    // coloque automaticamente
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idLibro")
     private Integer idLibro;
+
+    @Column(nullable = false)
     private String titulo;
+
+    @Column(nullable = false)
     private String autor;
+
     private String genero;
+
+    @Column(name = "anoPublicacion")
     private Integer anoPublicacion;
+
     private String sinopsis;
+
     private String portada;
 
-    @Temporal(TemporalType.DATE) // indica que solo se guarde la fecha sin la hora
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaSeleccion")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") 
     private Date fechaSeleccion;
 
-    @Enumerated(EnumType.STRING) //se usa para guardar EstadoLibro como string ya que lo tenemos como un enum, para no tener problemas con posibles cambios de orden
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estadoLectura", nullable = false)
     private EstadoLectura estado;
+
     public enum EstadoLectura {
-        pendiente,
+        Pendiente,
         en_lectura,
         leido
     }
